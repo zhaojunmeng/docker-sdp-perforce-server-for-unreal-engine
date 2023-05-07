@@ -148,7 +148,7 @@ if [ ! -e ${P4DInstanceScript} ]; then
    ${P4BIN} typemap -i < ${CfgDir}/typemap.unreal.cfg
    
    # Initializing protections table.
-   # In the pr-protect.cfg file, except user perforce, no other user of group can access depot by default.
+   # In the p4-protect.cfg file, except user perforce, no other user of group can access depot by default.
    ${P4BIN} protect -i < ${CfgDir}/p4-protect.cfg
    
    # Setting password
