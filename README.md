@@ -1,14 +1,20 @@
 # docker-sdp-perforce-server-for-unreal-engine
 
-Docker perforce server using SDP, configured for Unreal Engine.
+Docker perforce server using SDP(Server Deployment Package), configured for Unreal Engine(a unicode, case-insensitive Perforce server with Unreal Engine's recommended Typemap).
 
 ## How to use
 
 ### Build the image
 
-Use the prebuilt one from Docker Hub:[zhaojunmeng/sdp-perforce-server-for-unreal-engine](https://registry.hub.docker.com/r/zhaojunmeng/sdp-perforce-server-for-unreal-engine/)
+#### Use prebuilt image
 
-or build it yourself:
+You can use the prebuilt image from Docker Hub:
+
+[zhaojunmeng/sdp-perforce-server-for-unreal-engine](https://registry.hub.docker.com/r/zhaojunmeng/sdp-perforce-server-for-unreal-engine/)
+
+or
+
+#### Build it yourself:
 
 ```bash
 
@@ -25,6 +31,12 @@ docker save perforce-sdp-server-for-unreal-engine:r22.2 -o perforce-sdp-server-f
 ### Run the image
 
 The first time you run a SDP instance, you must login as user 'perforce' using P4Admin, and change the default password.
+
+Details on how to run:
+
+### Customize
+
+
 
 ## Disclaimer
 
