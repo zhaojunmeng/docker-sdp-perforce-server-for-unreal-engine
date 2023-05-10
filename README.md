@@ -14,7 +14,7 @@ You can use the prebuilt image from Docker Hub: [zhaojunmeng/sdp-perforce-server
 
 * #### Build it yourself
 
-In the project root directory, use the following command to build the image using p4d version r22.2
+In the project root directory, use the following command to build the image (using p4d version r22.2 as default).
 
 ```bash
 
@@ -22,21 +22,57 @@ docker build . -t perforce-sdp-server-for-unreal-engine:r22.2 --no-cache
     
 ```
 
-If you want to run the image on NAS, you must save the image as a tar file, so you can upload it to the NAS.
+If you want to run the container on NAS, you must save the image as a tar file, so you can upload it to the NAS.
 
 ```bash
 docker save perforce-sdp-server-for-unreal-engine:r22.2 -o perforce-sdp-server-for-unreal-engine-r22.2.tar
 ```
 
-### 2. Run the image
+Available --build-arg:
+| ARG         | default value | meaning                                                                |
+| ----------- | ------------- | ---------------------------------------------------------------------- |
+| OS_DISTRO   | jammy         | ubuntu version                                                         |
+| SDP_VERSION | .2022.2.29441 | SDP version                                                            |
+| P4_VERSION  | r22.2         | P4 binaries version                                                    |
+| P4_BIN_LIST | p4,p4d        | Helix binaries, for minal usage, only p4 and p4d need to be downloaded |
 
-The first time you run a SDP instance, you must login as user 'perforce' using P4Admin, and change the default password.
+Also you can tweak the .cfg files in the "files_for_run" folder, when you build your own image.
 
-Details on how to run:
+### 2. Run the container
 
-### 3. Customize
+Here's an example running on Docker Desktop.
 
+To run the container from image, the following is required:
 
+Ports: port to connect
+
+Volumes: 4 folders to mount for "/hxmetadata", "/hxdepots", "/hxlogs", "/p4" on the container.(The 4 folders is explained here: [Volume Layout and Hardware](https://swarm.workshop.perforce.com/projects/perforce-software-sdp/view/main/doc/SDP_Guide.Unix.html#_volume_layout_and_hardware))
+
+![Docker parameters](docs/images/RunningOnDockerDesktop_1.png)
+
+After clicked "Run" button, see the Docker Logs and wait perforce server(p4d) to start in a few seconds.
+
+![Logs output](docs/images/RunningOnDockerDesktop_2.png)
+
+### 3. Connect to Perforce server
+
+After the container's first setup, use [P4Admin](https://www.perforce.com/downloads/administration-tool) to login to Perforce to create new depots, groups and users.
+
+>Server: the ip address or domain of your server, for Docker Desktop, it's 127.0.0.1:1666.
+>
+>User: the default and the only user is "perforce"(configured in p4-protect.cfg), enter the server ip
+
+![Login as user perforce](docs/images/P4Admin_1.png)
+
+After click "OK", you must change the default password for user "perforce" (because security level is set to 3).
+
+The old password is F@stSCM! by default (configured in Dockerfile: P4_PASSWD).
+
+![Change default password](docs/images/P4Admin_2.png)
+
+After login, you can create new depots, groups and users.
+
+Enjoy!
 
 ## Disclaimer
 
