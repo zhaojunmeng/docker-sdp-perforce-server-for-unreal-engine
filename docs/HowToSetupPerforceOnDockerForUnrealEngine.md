@@ -6,7 +6,7 @@
 
 第一步肯定是搜索网上现有的资料，下面是我搜索到的内容：
 
-+ [Using Perforce as Source Control](https://docs.unrealengine.com/5.1/en-US/using-perforce-as-source-control-for-unreal-engine/)
+* [Using Perforce as Source Control](https://docs.unrealengine.com/5.1/en-US/using-perforce-as-source-control-for-unreal-engine/)
 
 Unreal的官方文档，其中重要的关键词是：
 
@@ -14,11 +14,11 @@ Unreal的官方文档，其中重要的关键词是：
 
 "set up your P4 Typemap so Perforce knows how to treat Unreal file types"
 
-+ [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
+* [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
 
 跟随上面的case-insensitive, Typemap关键词，搜索到的比较全面的一片文章，并且在GitHub上面开源了([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))，如果我不多搜索一下，可能基本上就会选择这个方案来做了。
 
-+ [Making a Perforce Server With Docker](https://aricodes.net/posts/perforce-server-with-docker/)
+* [Making a Perforce Server With Docker](https://aricodes.net/posts/perforce-server-with-docker/)
 
 这篇是我和上面同时搜到的文章，这个文章里面的方案我不建议使用，主要是因为作者其实自己平时不使用Perforce：
 > I do not personally use Perforce and devised this tutorial for a friend
@@ -29,25 +29,55 @@ Unreal的官方文档，其中重要的关键词是：
 
 作者根据上面的结论，自己写的Dockerfile，分了2个volumes，而前一篇文章的方案，只分配了一个volume。基于这个不同点，就让我出发去寻找到底怎么分配volume才是合理的方案。
 
-| 链接                                                                                              | 描述  | 缺点 |
-| ------------------------------------------------------------------------------------------------- | ----- | - |
-| [How Docker Works with Helix Core](https://www.perforce.com/blog/vcs/how-docker-works)                        | Perforce自己官方并没有一个Docker的image<br> 文章讲了官方自己做的在Docker和非Docker环境部署的性能差异 | |
-| [perforce_software / SDP](https://swarm.workshop.perforce.com/projects/perforce-software-sdp)                        | Server Deployment Package (SDP) | |
-| [Perforce Helix Installer](https://swarm.workshop.perforce.com/projects/perforce_software-helix-installer)                        | Perforce Helix Installer | "Please DO NOT contact Perforce Support for the Helix Installer, as it is not an officially supported product offering." <br> 这个项目不是官方支持的|
+* [perforce_software / SDP](https://swarm.workshop.perforce.com/projects/perforce-software-sdp)
 
-在群晖的Docker中，搜索image，关键词perforce，可以搜到几个结果
+顺着上面的线索，我搜到了官方支持的Server Deployment Package (简称SDP)
 
-| 链接                             | 描述 | 不满足我需求的点 | DockerImage |
-| -------------------------------- | ----- | - | - |
-| [ambakshi/docker-perforce](https://github.com/ambakshi/docker-perforce) | 使用人最多的一个perforce docker image <br>基于centos系统 | 最后是2018.2版本的P4 | [ambakshi/perforce-server](https://registry.hub.docker.com/r/ambakshi/perforce-server) |
-| [Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce)                        | 在上面的基础上，增加了case, typemap，上面文章的GitHub仓库  | | no |
-| [MothDoctor/docker-perforce](https://github.com/MothDoctor/docker-perforce)                        | 在上面的基础上，增加了case, typemap 2022.1 <br>[Using and setting up Perforce repository](https://dev.epicgames.com/community/learning/tutorials/Gxoj/unreal-engine-using-and-setting-up-perforce-repository#unreal-specific-typemap-5) | | [mothdoctor/perforce-server-unreal](https://registry.hub.docker.com/r/mothdoctor/perforce-server-unreal/) |
-| [HaberkornJonas/Perforce-Server-On-Docker-For-Unreal](https://github.com/HaberkornJonas/Perforce-Server-On-Docker-For-Unreal)                        | 参考了上面的仓库  | | no |
-| [XistGG/docker-perforce-server-for-unreal-engine](https://github.com/XistGG/docker-perforce-server-for-unreal-engine)                        | 参考了前两个的仓库 基于ubuntu系统  | | no |
+> The following describes some of the many features and benefits of using the SDP to manage Helix Core.
+>
+> Optimal Performance, Data Safety, and Simplified Backup
+>
+> The SDP provides a standard structure for operating Perforce that is optimized for performance, scalability, and ease of backup. The SDP Guide includes documentation that promotes volume layout and storage architecture best practices.
+
+这个项目主要是通过一些脚本，对P4D Instance进行了一层包装，支持了一台机器多个Instance，甚至每一个Instance都可以有不同版本的P4二进制。
+
+对上一篇文章吐槽的文件散落在各个位置的问题，也根据文件的性质，进行了目录的合理规划，告诉了你哪个目录要备份，哪个目录要高访问速度等。建议大家可以读一下这个项目的文档（当然了，整个文档还挺长的）。
+
+另外官方默认的文档里面，初始化一个Perforce服务器，并不是用的SDP，可以认为是裸启动(非SDP)的方式。但是看看官方的p4prometheus这个监控项目来看，就分别支持了sdp和nonsdp这两种不同的安装方式安装方式
+[perforce/p4prometheus/scripts/docker/Dockerfile](https://github.com/perforce/p4prometheus/tree/master/scripts/docker)
+
+* [Perforce Helix Installer](https://swarm.workshop.perforce.com/projects/perforce_software-helix-installer)
+
+Helix Installer是基于SDP的一个项目，但是这个不是官方支持，是社区支持的项目。
+> Please DO NOT contact Perforce Support for the Helix Installer, as it is not an officially supported product offering.
+
+虽然不是官方支持，但是在写Docker用到的脚本时，还是参考了该项目中的脚本。
 
 ## 需求总结
 
-## 源码
+看完了上面的各个文档，我的需求已经清晰了：
+
+* 使用SDP
+* case-insensitive
+* Typemap for Unreal Engine
+* [Setting up a server for Unicode](https://www.perforce.com/manuals/p4sag/Content/P4SAG/superuser.unicode.setup.html) - 为了仓库更好的支持中文
+* Perforce的版本要新
+
+## 动手实现
+
+### 实现步骤
+
+* Build阶段
+  * apt-get安装依赖
+  * 下载SDP
+  * 下载Perforce二进制文件
+* Run阶段
+  * 如果SDP未安装，安装SDP
+  * 如果Perforce二进制未安装，安装Perforce二进制
+  * 如果SDP Instance未初始化，初始化SDP Instance
+  * Run SDP Instance
+
+### 源码
 
 构建好可以直接使用的Docker Image在这里(也可以直接在Docker里面搜索到)：
 [zhaojunmeng/sdp-perforce-server-for-unreal-engine](https://registry.hub.docker.com/r/zhaojunmeng/sdp-perforce-server-for-unreal-engine/)
@@ -55,53 +85,40 @@ Unreal的官方文档，其中重要的关键词是：
 源代码在这里：
 [zhaojunmeng/docker-sdp-perforce-server-for-unreal-engine](https://github.com/zhaojunmeng/docker-sdp-perforce-server-for-unreal-engine)
 
-## 实现选型
+关于源码本身，我添加了比较详细的注释，细节大家可以根据上面整理的步骤，看代码即可，这里我主要想唠一唠一些实现过程中的选型。
 
-关于源码本身，我添加了比较详细的注释，细节大家看代码即可，这里我主要想唠一唠一些实现过程中的选型。
-
-### SDP vs non SDP
-
-从p4prometheus这个监控项目来看，就有分sdp和nonsdp的安装方式
-[perforce/p4prometheus/scripts/docker/Dockerfile](https://github.com/perforce/p4prometheus/tree/master/scripts/docker)
-
-SDP的优势：
-明确的文件夹划分，可以让不同的文件夹放到不同性能的存储上。
-具体可以参考：
-
-### Docker的细节
+### Docker的实现细节
 
 #### ubuntu vs centos
 
-centos已经不再官方维护了
+找到的代码参考里，base image，既有ubuntu，也有centos。
+没选centos的原因是 [This image is no longer supported/maintained](https://hub.docker.com/_/centos)
 
 #### multi stage
 
-multi stage是会最大化利用本地的缓存的，不用每一次修改，都全量去下载
+multi stage会最大化利用本地的build缓存，避免了修改一行代码，要去全量下载所有需要下载的内容。
 
-stage拆分原则，就是每一个下载，都分了一个stage
+我实现时stage的拆分原则，就是每个不同的下载，都单独作为一个stage存在。参考：
 
 [Best practices for writing Dockerfiles/Use multi-stage builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds)
 
 #### 打包perforce binaries进入image
 
-有些实现，是在第一次初始化的时候，去下载p4d等二进制的。实测下来，偶尔会遇到下载速度特别慢的情况。为了用户体验，打开image就可以使用p4仓库，就在build image阶段，提前下载好了二进制文件。
+有些image的实现，是在运行container，执行第一次初始化的时候，去下载p4d等二进制文件的。
 
-如果需要使用不同版本的二进制文件，那么可以使用不同的参数，build一个新的image即可。
+我实测下来，偶尔会遇到下载速度特别慢的情况。为了用户体验，打开image就可以使用P4服务器，我就在build image阶段，提前下载好了二进制文件。
 
-## 实现步骤
+如果你需要使用不同版本的二进制文件，可以自己用不同的参数，build一个新的image即可。
 
-### Build阶段
+## 实现参考
 
-#### 1. 下载SDP
+在实现的过程中，我参考了很多前人已经实现好的image，这里列一下，方便大家参考。
 
-#### 2. 下载Perforce二进制文件
+下面这些仓库，都不是基于SDP，也都没有unicode的实现，除了第一个基础仓库，其他都实现了case-insensitive和Typemap。
 
-### Run阶段
-
-#### 确认SDP是否安装
-
-#### 确认Perforce二进制是否安装
-
-#### 确认SDP Instance是否初始化
-
-#### Run SDP Instance
+| 链接                                                                                                                     | 描述                                                                                                                                                                                                              | 系统   | p4版本 | P4D运行时下载 | DockerImage                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ------ | ------------- | --------------------------------------------------------------------------------------------------------- |
+| 1. [ambakshi/docker-perforce](https://github.com/ambakshi/docker-perforce)                                               | 目前使用者最多的perforce docker image<br>                                                                                                                                                                         | centos | 2018.2 | 否            | [ambakshi/perforce-server](https://registry.hub.docker.com/r/ambakshi/perforce-server)                    |
+| 2. [Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce)                                                   | [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/) 文章作者在1的基础上 的实现<br>                                     | centos | 2018.2 | 否            | no                                                                                                        |  |
+| 3. [MothDoctor/docker-perforce](https://github.com/MothDoctor/docker-perforce)                                           | 参考了1和2<br>还写了一篇在UE下面使用Perforce的文章 [Using and setting up Perforce repository](https://dev.epicgames.com/community/learning/tutorials/Gxoj/unreal-engine-using-and-setting-up-perforce-repository) | centos | 2022.1 | 否            | [mothdoctor/perforce-server-unreal](https://registry.hub.docker.com/r/mothdoctor/perforce-server-unreal/) |
+| 4. [XistGG/docker-perforce-server-for-unreal-engine](https://github.com/XistGG/docker-perforce-server-for-unreal-engine) | 参考了1和2两个的仓库                                                                                                                                                                                              | ubuntu | latest | 是            | no                                                                                                        |
