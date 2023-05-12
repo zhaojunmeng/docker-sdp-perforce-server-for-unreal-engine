@@ -1,4 +1,4 @@
-# 自己动手，在(NAS)群晖上，用Docker搭建Perforce服务器，版本控制Unreal项目
+# 自己动手，在群晖(NAS)上，用Docker搭建Perforce服务器，版本控制Unreal项目
 
 ## 需求分析
 
@@ -122,3 +122,7 @@ multi stage会最大化利用本地的build缓存，避免了修改一行代码�
 | 2. [Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce)                                                   | [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/) 文章作者在1的基础上 的实现<br>                                     | centos | 2018.2 | 否            | no                                                                                                        |  |
 | 3. [MothDoctor/docker-perforce](https://github.com/MothDoctor/docker-perforce)                                           | 参考了1和2<br>还写了一篇在UE下面使用Perforce的文章 [Using and setting up Perforce repository](https://dev.epicgames.com/community/learning/tutorials/Gxoj/unreal-engine-using-and-setting-up-perforce-repository) | centos | 2022.1 | 否            | [mothdoctor/perforce-server-unreal](https://registry.hub.docker.com/r/mothdoctor/perforce-server-unreal/) |
 | 4. [XistGG/docker-perforce-server-for-unreal-engine](https://github.com/XistGG/docker-perforce-server-for-unreal-engine) | 参考了1和2两个的仓库                                                                                                                                                                                              | ubuntu | latest | 是            | no                                                                                                        |
+
+## 如何运行
+
+参考： [如何在群晖(NAS)上，部署一个为UnrealEngine定制的Perforce服务器](HotToRunPerforceServerOnSynologyForUnrealEngine.md)
