@@ -34,9 +34,20 @@
 
 ## 连接到Perforce服务器
 
+After the container's first setup, use [P4Admin](https://www.perforce.com/downloads/administration-tool) to login to Perforce to create new depots, groups and users.
 
+>Server: the ip address or domain of your server, for Docker Desktop, it's 127.0.0.1:1666.
+>
+>User: the default and the only user is "perforce"(configured in p4-protect.cfg), enter the server ip
 ![1](images/P4Admin_1.png)
+After click "OK", you must change the default password for user "perforce" (because security level is set to 3).
+
+The old password is F@stSCM! by default (configured in Dockerfile: P4_PASSWD).
 ![2](images/P4Admin_2.png)
+
+After login, you can create new depots, groups and users.
+
+Enjoy!
 
 ## 如何实现
 
