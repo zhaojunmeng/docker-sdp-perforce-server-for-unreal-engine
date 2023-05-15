@@ -8,9 +8,15 @@
 
 ## 下载Docker image
 
-在群晖的“Docker”里面，找到左侧的“映像”Tab，再点击“新增”-“从URL添加”，在弹出的界面中，粘贴下面的地址，然后“新增”按钮
+1. 打开“Docker”应用，点击左侧的“映像”Tab，再点击“新增”-“从URL添加”
 
-<https://hub.docker.com/r/zhaojunmeng/sdp-perforce-server-for-unreal-engine>
+    ![1](images/SynologyAddImage_1.png)
+
+2. 在弹出的“从 URL 添加”界面中，在“地址”部分，粘贴下面的地址，然后“新增”按钮
+
+    <https://hub.docker.com/r/zhaojunmeng/sdp-perforce-server-for-unreal-engine>
+
+    ![2](images/SynologyAddImage_2.png)
 
 ## 启动容器
 
@@ -27,6 +33,7 @@
 3. 端口界面，填写你要映射的端口号。
 
     (P4默认的端口号习惯是1666)
+
     ![4](images/RunningOnSynology_4.png)
 
 4. 存储空间设置界面，要点击“添加文件夹”
@@ -51,14 +58,17 @@
 
 >Server: 服务器的ip地址或者域名，外加之前启动容器步骤时设置的端口号，比如：1666
 >
->User: the default and the only user is "perforce"(configured in p4-protect.cfg), enter the server ip
-![1](images/P4Admin_1.png)
-After click "OK", you must change the default password for user "perforce" (because security level is set to 3).
+>User: 填写"perforce"
 
-The old password is F@stSCM! by default (configured in Dockerfile: P4_PASSWD).
+![1](images/P4Admin_1.png)
+
+点击“OK”后，会弹出修改密码界面。(security level 3会要求第一次登陆时，必须修改密码)
+
+输入old password: F@stSCM!，然后输入新密码，点击“OK”
+
 ![2](images/P4Admin_2.png)
 
-After login, you can create new depots, groups and users.
+登录成功后，就可以开始创建depot，group和user了。
 
 Enjoy!
 

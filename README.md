@@ -72,6 +72,8 @@ The old password is F@stSCM! by default (configured in Dockerfile: P4_PASSWD).
 
 After login, you can create new depots, groups and users.
 
+在群晖(NAS)上面如何运行，参考：[如何在群晖(NAS)上，部署一个为UnrealEngine定制的Perforce服务器](docs/HotToRunPerforceServerOnSynologyForUnrealEngine.md)
+
 Enjoy!
 
 ## Disclaimer
