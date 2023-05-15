@@ -40,7 +40,7 @@
 
     ![5](images/RunningOnSynology_5.png)
 
-    右边红圈里，/hxdepots, /hxlogs, /hxmetadata, /p4这4个目录是一定要提供的。
+    右边红圈里，/hxdepots, /hxlogs, /hxmetadata, /p4这4个目录是一定要提供的。(这4个目录的含义，以及建议对应的存储方式，参考: [Volume Layout and Hardware](https://swarm.workshop.perforce.com/projects/perforce-software-sdp/view/main/doc/SDP_Guide.Unix.html#_volume_layout_and_hardware))
 
     左边红圈是在NAS里面的文件夹，是Docker启动以后，Perforce的数据文件等持久化的地方。
 
