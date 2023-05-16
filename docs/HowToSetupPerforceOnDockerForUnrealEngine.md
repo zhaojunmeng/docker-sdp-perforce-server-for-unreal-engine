@@ -1,63 +1,65 @@
-# 自己动手，在群晖(NAS)上，用Docker搭建Perforce服务器，版本控制Unreal项目
+# 自己动手，在群晖(NAS)上用Docker搭建Perforce服务器，管理Unreal项目
 
 ## 需求分析
 
-我的需求是，在自己的NAS(群晖)上，搭建一个Perforce服务器，用来版本控制Unreal项目。
+我的需求是，在自己的NAS(群晖)上，搭建一个Perforce服务器，对Unreal项目进行版本控制。
 
-第一步肯定是搜索网上现有的资料，下面是我搜索到的内容：
+第一步：搜索网上现有的资料
 
-* [Using Perforce as Source Control](https://docs.unrealengine.com/5.1/en-US/using-perforce-as-source-control-for-unreal-engine/)
+下面是我搜索到的内容：
 
-Unreal的官方文档，其中重要的关键词是：
+1. [Using Perforce as Source Control](https://docs.unrealengine.com/5.1/en-US/using-perforce-as-source-control-for-unreal-engine/)
+  
+    Unreal的官方文档，其中重要的关键词是：
 
-"a case-insensitive Perforce server"
+    "a case-insensitive Perforce server"
 
-"set up your P4 Typemap so Perforce knows how to treat Unreal file types"
+    "set up your P4 Typemap so Perforce knows how to treat Unreal file types"
 
-* [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
+2. [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
 
-跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，并且在GitHub上面开源了相关代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
+    跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，并且在GitHub上面开源了相关代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
 
-这篇一步一步讲的很详细，如果没有看到下面那篇文章，我很可能会按照这篇文章的方案来搭建。
+    这篇一步一步讲的很详细，如果没有看到下面那篇文章，我很可能会按照这篇文章的方案来搭建。
 
-* [Making a Perforce Server With Docker](https://aricodes.net/posts/perforce-server-with-docker/)
+3. [Making a Perforce Server With Docker](https://aricodes.net/posts/perforce-server-with-docker/)
 
-这篇是我和上面同时搜到的文章，这个文章里面的方案我不建议使用，主要是因为作者其实自己平时不使用Perforce：
-> I do not personally use Perforce and devised this tutorial for a friend
+    这篇是我和上面同时搜到的文章，这个文章里面的方案我不建议使用，主要是因为作者其实自己平时不使用Perforce：
+    > I do not personally use Perforce and devised this tutorial for a friend
 
-但是，文章里面却提到了一些比较关键的点：
+    但是，文章里面却提到了一些比较关键的点：
 
-> It also places files all over the system. You can configure a data directory, but its database is initialized from where the start command is run instead of in a dedicated location and all non-volume files in a Docker container are ephemeral.
+    > It also places files all over the system. You can configure a data directory, but its database is initialized from where the start command is run instead of in a dedicated location and all non-volume files in a Docker container are ephemeral.
 
-作者根据上面的结论，自己写的Dockerfile，分了2个volumes，而前一篇文章的方案，只分配了一个volume。
+    作者根据上面的结论，自己写的Dockerfile，分了2个volumes，而前一篇文章的方案，只分配了一个volume。
 
-为了确定到底是一个volume好，还是2个volume好，我还得继续搜索。
+    为了确定到底是一个volume好，还是2个volume好，我还得继续搜索。
 
-* [perforce_software / SDP](https://swarm.workshop.perforce.com/projects/perforce-software-sdp)
+4. [perforce_software / SDP](https://swarm.workshop.perforce.com/projects/perforce-software-sdp)
 
-加入了volume关键词搜索后，我搜到了官方支持的Server Deployment Package (简称SDP)
+    加入了volume关键词搜索后，我搜到了官方支持的Server Deployment Package (简称SDP)
 
-> The following describes some of the many features and benefits of using the SDP to manage Helix Core.
->
-> Optimal Performance, Data Safety, and Simplified Backup
->
-> The SDP provides a standard structure for operating Perforce that is optimized for performance, scalability, and ease of backup. The SDP Guide includes documentation that promotes volume layout and storage architecture best practices.
+    > The following describes some of the many features and benefits of using the SDP to manage Helix Core.
+    >
+    > Optimal Performance, Data Safety, and Simplified Backup
+    >
+    > The SDP provides a standard structure for operating Perforce that is optimized for performance, scalability, and ease of backup. The SDP Guide includes documentation that promotes volume layout and storage architecture best practices.
 
-这个项目主要是通过一些脚本，对P4D Instance进行了一层包装，支持了一台机器多个Instance，甚至每一个Instance都可以有不同版本的P4二进制。
+    这个项目主要是通过一些脚本，对P4D Instance进行了一层包装，支持了一台机器多个Instance，甚至每一个Instance都可以有不同版本的P4二进制。
 
-对上一篇文章中吐槽的文件散落在各个位置的问题，SDP也根据文件的性质，进行了目录的合理规划，告诉了你哪个目录要备份，哪个目录要高访问速度等。建议大家可以读一下这个项目的文档（说实话，整个文档还挺长的）。
+    对上一篇文章中吐槽的文件散落在各个位置的问题，SDP也根据文件的性质，进行了目录的合理规划，告诉了你哪个目录要备份，哪个目录要高访问速度等。建议大家可以读一下这个项目的文档（说实话，整个文档还挺长的）。
 
-另外官方默认的文档[Installing the server](https://www.perforce.com/manuals/p4sag/Content/P4SAG/chapter.install.html)里，初始化一个Perforce服务器，并不是用的SDP，可以认为是裸安装(none SDP)的方式。
+    另外官方默认的文档[Installing the server](https://www.perforce.com/manuals/p4sag/Content/P4SAG/chapter.install.html)里，初始化一个Perforce服务器，并不是用的SDP，可以认为是裸安装(none SDP)的方式。
 
-但是看看官方的p4prometheus这个监控项目来看，分别支持了sdp和nonsdp这两种不同的安装方式安装方式
-[perforce/p4prometheus/scripts/docker/Dockerfile](https://github.com/perforce/p4prometheus/tree/master/scripts/docker)
+    但是看看官方的p4prometheus这个监控项目来看，分别支持了sdp和nonsdp这两种不同的安装方式安装方式
+    [perforce/p4prometheus/scripts/docker/Dockerfile](https://github.com/perforce/p4prometheus/tree/master/scripts/docker)
 
-* [Perforce Helix Installer](https://swarm.workshop.perforce.com/projects/perforce_software-helix-installer)
+5. [Perforce Helix Installer](https://swarm.workshop.perforce.com/projects/perforce_software-helix-installer)
 
-Helix Installer是基于SDP的一个项目，但是这个不是官方支持，是社区支持的项目。
-> Please DO NOT contact Perforce Support for the Helix Installer, as it is not an officially supported product offering.
+    Helix Installer是基于SDP的一个项目，但是这个不是官方支持，是社区支持的项目。
+    > Please DO NOT contact Perforce Support for the Helix Installer, as it is not an officially supported product offering.
 
-虽然不是官方支持的项目，但是在写Docker中的脚本时，拿项目中的脚本来进行学习和参考还是很有用的。
+    虽然不是官方支持的项目，但是在写Docker中的脚本时，拿项目中的脚本来进行学习和参考还是很有用的。
 
 ## 需求总结
 
