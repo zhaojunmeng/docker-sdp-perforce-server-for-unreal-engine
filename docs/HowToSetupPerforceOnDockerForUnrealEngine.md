@@ -18,9 +18,9 @@
 
 2. [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
 
-    跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，并且在GitHub上面开源了相关代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
+    跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，作者还在GitHub上面开源了相关代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
 
-    这篇一步一步讲的很详细，如果没有看到下面那篇文章，我很可能会按照这篇文章的方案来搭建。
+    这篇一步一步讲的很详细，如果没有看到下面那篇文章，我很可能就按照这篇文章的方案来搭建了。
 
 3. [Making a Perforce Server With Docker](https://aricodes.net/posts/perforce-server-with-docker/)
 
@@ -45,13 +45,13 @@
     >
     > The SDP provides a standard structure for operating Perforce that is optimized for performance, scalability, and ease of backup. The SDP Guide includes documentation that promotes volume layout and storage architecture best practices.
 
-    这个项目主要是通过一些脚本，对P4D Instance进行了一层包装，支持了一台机器多个Instance，甚至每一个Instance都可以有不同版本的P4二进制。
+    这个项目主要是通过一些脚本，对P4D等程序调用进行了一层包装，支持了一台机器多个Instance，甚至每一个Instance都可以有不同版本的P4二进制。
 
     对上一篇文章中吐槽的文件散落在各个位置的问题，SDP也根据文件的性质，进行了目录的合理规划，告诉了你哪个目录要备份，哪个目录要高访问速度等。建议大家可以读一下这个项目的文档（说实话，整个文档还挺长的）。
 
     另外官方默认的文档[Installing the server](https://www.perforce.com/manuals/p4sag/Content/P4SAG/chapter.install.html)里，初始化一个Perforce服务器，并不是用的SDP，可以认为是裸安装(none SDP)的方式。
 
-    但是看看官方的p4prometheus这个监控项目来看，分别支持了sdp和nonsdp这两种不同的安装方式安装方式
+    但是看看官方的p4prometheus这个监控项目来看，分别支持了sdp和nonsdp这两种不同的安装方式安装方式（说明两种安装方式都是可用的方式，用哪种就看具体需求了）
     [perforce/p4prometheus/scripts/docker/Dockerfile](https://github.com/perforce/p4prometheus/tree/master/scripts/docker)
 
 5. [Perforce Helix Installer](https://swarm.workshop.perforce.com/projects/perforce_software-helix-installer)
