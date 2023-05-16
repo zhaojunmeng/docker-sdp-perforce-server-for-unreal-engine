@@ -4,9 +4,9 @@
 
 我的需求是，在自己的NAS(群晖)上，搭建一个Perforce服务器，对Unreal项目进行版本控制。
 
-第一步：搜索网上现有的资料
+### 第一步：搜索资料
 
-下面是我搜索到的内容：
+网上现有的内容：
 
 1. [Using Perforce as Source Control](https://docs.unrealengine.com/5.1/en-US/using-perforce-as-source-control-for-unreal-engine/)
   
@@ -18,7 +18,7 @@
 
 2. [Setting Up Perforce with Docker for Unreal Engine 4](https://www.froyok.fr/blog/2018-09-setting-up-perforce-with-docker-for-unreal-engine-4/)
 
-    跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，作者还在GitHub上面开源了相关代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
+    跟随上面的case-insensitive, Typemap关键词，搜索到了一篇比较全面的文章，作者还在GitHub上面开源了代码：([Froyok/froyok-perforce](https://github.com/Froyok/froyok-perforce))
 
     这篇一步一步讲的很详细，如果没有看到下面那篇文章，我很可能就按照这篇文章的方案来搭建了。
 
@@ -33,7 +33,7 @@
 
     作者根据上面的结论，自己写的Dockerfile，分了2个volumes，而前一篇文章的方案，只分配了一个volume。
 
-    为了确定到底是一个volume好，还是2个volume好，我还得继续搜索。
+    为了确定到底是一个volume好，还是2个volume好，得继续搜索。
 
 4. [perforce_software / SDP](https://swarm.workshop.perforce.com/projects/perforce-software-sdp)
 
@@ -61,7 +61,7 @@
 
     虽然不是官方支持的项目，但是在写Docker中的脚本时，拿项目中的脚本来进行学习和参考还是很有用的。
 
-## 需求总结
+### 需求总结
 
 看完了上面的各个文档，我的需求已经清晰了：
 
