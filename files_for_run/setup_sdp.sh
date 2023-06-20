@@ -55,7 +55,7 @@ if [ ! -e ${SDPVersionFile} ]; then
 
    # 13. Copy every existing p4 binaries into SDP folder.
    if [ -d "${DownloadsDir}/helix_binaries/" ]; then
-      run "mv ${DownloadsDir}/helix_binaries/* ${SDP}/helix_binaries/"
+      run "cp ${DownloadsDir}/helix_binaries/* ${SDP}/helix_binaries/"
    fi
 else
    msg "SDP already installed, version:"
