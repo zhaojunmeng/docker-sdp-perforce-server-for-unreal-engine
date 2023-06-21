@@ -18,14 +18,14 @@ In the project root directory, use the following command to build the image (usi
 
 ```bash
 
-docker build . -t perforce-sdp-server-for-unreal-engine:r22.2 --no-cache
+docker build . -t sdp-perforce-server-for-unreal-engine:r22.2 --no-cache
     
 ```
 
 If you want to run the container on NAS, you must save the image as a tar file, so you can upload it to the NAS.
 
 ```bash
-docker save perforce-sdp-server-for-unreal-engine:r22.2 -o perforce-sdp-server-for-unreal-engine-r22.2.tar
+docker save sdp-perforce-server-for-unreal-engine:r22.2 -o sdp-perforce-server-for-unreal-engine-r22.2.tar
 ```
 
 Available --build-arg:
