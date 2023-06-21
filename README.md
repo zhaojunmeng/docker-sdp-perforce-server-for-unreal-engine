@@ -14,26 +14,26 @@ You can use the prebuilt image from Docker Hub: [zhaojunmeng/sdp-perforce-server
 
 * #### Build it yourself
 
-In the project root directory, use the following command to build the image (using p4d version r22.2 as default).
+In the project root directory, use the following command to build the image (using p4d version r23.1 as default).
 
 ```bash
 
-docker build . -t sdp-perforce-server-for-unreal-engine:r22.2 --no-cache
+docker build . -t sdp-perforce-server-for-unreal-engine:r23.1 --no-cache
     
 ```
 
 If you want to run the container on NAS, you must save the image as a tar file, so you can upload it to the NAS.
 
 ```bash
-docker save sdp-perforce-server-for-unreal-engine:r22.2 -o sdp-perforce-server-for-unreal-engine-r22.2.tar
+docker save sdp-perforce-server-for-unreal-engine:r23.1 -o sdp-perforce-server-for-unreal-engine-r23.1.tar
 ```
 
 Available --build-arg:
 | ARG         | default value | meaning                                                                |
 | ----------- | ------------- | ---------------------------------------------------------------------- |
 | OS_DISTRO   | jammy         | ubuntu version                                                         |
-| SDP_VERSION | .2022.2.29441 | SDP version                                                            |
-| P4_VERSION  | r22.2         | P4 binaries version                                                    |
+| SDP_VERSION | .2023.1.29621 | SDP version                                                            |
+| P4_VERSION  | r23.1         | P4 binaries version                                                    |
 | P4_BIN_LIST | p4,p4d        | Helix binaries, for minal usage, only p4 and p4d need to be downloaded |
 
 Also you can tweak the .cfg files in the "files_for_run" folder, when you build your own image.
