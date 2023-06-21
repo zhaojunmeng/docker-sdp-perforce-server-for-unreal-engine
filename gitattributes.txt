@@ -1,0 +1,6 @@
+# This is a text-only repository, everything is text
+* text
+
+# Docker can not handle CR in .sh files, Never allow CR in our *.sh files! Always LF only
+*.cfg text eol=lf
+*.sh text eol=lf
